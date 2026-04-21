@@ -1,0 +1,63 @@
+import MovieCard from './MovieCard';
+import './App.css';
+
+function App() {
+  // 1. Tableau de 5 films
+  const movies = [
+    { id: 1, title: "Inception", genre: "Sci-Fi", year: 2010, rating: 8.8, isTrending: true },
+    { id: 2, title: "The Dark Knight", genre: "Action", year: 2008, rating: 9.0, isTrending: false },
+    { id: 3, title: "Pulp Fiction", genre: "Crime", year: 1994, rating: 8.9, isTrending: false },
+    { id: 4, title: "The Matrix", genre: "Sci-Fi", year: 1999, rating: 8.7, isTrending: true },
+    { id: 5, title: "Mad Max: Fury Road", genre: "Action", year: 2015, rating: 8.1, isTrending: true },
+  ];
+
+  // 5.  Afficher uniquement les films d'Action
+  const actionMovies = movies.filter(movie => movie.genre === "Action");
+
+  // BONUS : Trier par année (plus récent au plus ancien)
+  const sortedMovies = [...actionMovies].sort((a, b) => b.year - a.year);
+
+  return (
+    <div className="app">
+      <h1>Cinema Explorer</h1>
+      
+      <h2>Films d'Action (triés par année)</h2>
+      
+      {/* 6. GESTION DU CAS VIDE */}
+      {sortedMovies.length === 0 ? (
+        <p>Aucun film trouvé dans ce genre.</p>
+      ) : (
+        <ul className="movie-list">
+          {/* 2. AFFICHAGE AVEC MAP */}
+          {sortedMovies.map((movie) => (
+            // 3. KEY unique obligatoire
+            <li key={movie.id}>
+              <MovieCard movie={movie} />
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* ANALYSE CRITIQUE */}
+      {/*
+        1. Pourquoi .map() ?
+           → DRY (Don't Repeat Yourself). Avec 100 films, répéter manuellement 
+           serait impossible à maintenir. .map() génère dynamiquement le JSX 
+           à partir des données.
+        
+        2. Pourquoi la key est importante ?
+           → React utilise les keys pour identifier les éléments dans le DOM virtuel.
+           Cela optimise le re-rendering (React sait exactement quel élément a changé,
+           été ajouté ou supprimé sans re-render toute la liste).
+           Sans key, React affiche un warning et les performances se dégradent.
+        
+        3. Pourquoi filtrer avant d'afficher ?
+           → Séparation des responsabilités : la logique de transformation des données
+           reste dans le JS, le JSX reste déclaratif pour l'affichage.
+           Cela rend le code plus lisible, testable et performant.
+      */}
+    </div>
+  );
+}
+
+export default App;
